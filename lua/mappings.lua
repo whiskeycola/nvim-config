@@ -17,4 +17,3 @@ map(
   "<cmd> exe 'silent !kitty --detach --directory ' . getcwd() <CR>",
   { desc = "open terminal new window" }
 )
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")

@@ -2,7 +2,8 @@ return {
   "saecki/crates.nvim",
   ft = { "rust", "toml" },
   init = function()
-    vim.keymap.set("n", "<leader>rcu", function()
+    local map = vim.keymap.set
+    map("n", "<leader>rcu", function()
       require("crates").update_all_crates()
     end, { desc = "Update all crates" })
   end,
