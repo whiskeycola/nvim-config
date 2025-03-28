@@ -13,7 +13,7 @@ end, { desc = "open nautilus current project" })
 
 map(
   "n",
-  "<leader>t",
+  "<leader>tt",
   "<cmd> exe 'silent !kitty --detach --directory ' . getcwd() <CR>",
   { desc = "open terminal new window" }
 )

@@ -7,9 +7,9 @@ return {
     map("n", "<leader>k", function()
       vim.cmd.RustLsp { "hover", "actions" }
     end, { desc = "rust hover actions" })
-    map("n", "<leader>a", function()
-      vim.cmd.RustLsp "codeAction"
-    end, { desc = "rust code actions" })
+    -- map("n", "<leader>a", function()
+    --   vim.cmd.RustLsp "codeAction"
+    -- end, { desc = "rust code actions" })
   end,
   config = function()
     vim.g.rustaceanvim = {
