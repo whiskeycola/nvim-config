@@ -4,9 +4,14 @@ return {
   lazy = false,
   version = false, -- set this if you want to always pull the latest change
   opts = {
-    provider = "gemini-2.5-pro",
+    provider = "gemini-2.5-pro-exp-03-25",
     -- provider = "openrouter",
     vendors = {
+      ["gemini-2.5-pro-exp-03-25"] = {
+        __inherited_from = "gemini",
+        model = "gemini-2.5-pro-exp-03-25",
+        max_tokens = 800000,
+      },
       ["deepseek-v3-0324"] = {
         __inherited_from = "openai",
         api_key_name = "OPENROUTER_AVANTE_KEY",
