@@ -1,12 +1,29 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
-  lazy = false,
   version = false, -- set this if you want to always pull the latest change
   opts = {
-    provider = "gemini-2.5-pro-exp-03-25",
+    provider = "aistudio-gemini",
     -- provider = "openrouter",
-    vendors = {
+    providers = {
+      ["aistudio-gemini"] = {
+        __inherited_from = "openai",
+        api_key_name = "OPENROUTER_AVANTE_KEY",
+        endpoint = "http://localhost:2048/v1",
+        model = "aistudio-gemini",
+        -- temperature = 0,
+        max_tokens = 800000,
+      },
+      ["gemini-2.5-flash-preview-04-17"] = {
+        __inherited_from = "gemini",
+        model = "gemini-2.5-flash-preview-04-17",
+        max_tokens = 800000,
+      },
+      ["gemini-2.5-pro-preview-03-25"] = {
+        __inherited_from = "gemini",
+        model = "gemini-2.5-pro-preview-03-25",
+        max_tokens = 800000,
+      },
       ["gemini-2.5-pro-exp-03-25"] = {
         __inherited_from = "gemini",
         model = "gemini-2.5-pro-exp-03-25",
@@ -25,7 +42,7 @@ return {
         endpoint = "https://openrouter.ai/api/v1",
         model = "deepseek/deepseek-r1:free",
         disable_tools = true,
-        temperature = 0,
+        -- temperature = 0,
         max_tokens = 163840,
       },
       ["qwq-32b"] = {
@@ -33,7 +50,7 @@ return {
         api_key_name = "OPENROUTER_AVANTE_KEY",
         endpoint = "https://openrouter.ai/api/v1",
         model = "qwen/qwq-32b:free",
-        temperature = 0,
+        -- temperature = 0,
         disable_tools = true,
       },
       ["gemini-2.5-pro"] = {
@@ -41,12 +58,23 @@ return {
         api_key_name = "OPENROUTER_AVANTE_KEY",
         endpoint = "https://openrouter.ai/api/v1",
         model = "google/gemini-2.5-pro-exp-03-25:free",
-        temperature = 0,
+        -- temperature = 0,
         timeout = 60000,
         disable_tools = true,
         max_tokens = 800000,
       },
     },
+    -- The system_prompt type supports both a string and a function that returns a string. Using a function here allows dynamically updating the prompt with mcphub
+    system_prompt = function()
+      local hub = require("mcphub").get_hub_instance()
+      return hub:get_active_servers_prompt()
+    end,
+    -- The custom_tools type supports both a list and a function that returns a list. Using a function here prevents requiring mcphub before it's loaded
+    custom_tools = function()
+      return {
+        require("mcphub.extensions.avante").mcp_tool(),
+      }
+    end,
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
