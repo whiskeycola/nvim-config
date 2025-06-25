@@ -29,6 +29,7 @@ return {
       "twig",
       "yaml",
       "xml",
+      "svelte",
     },
     indent = {
       enable = true,
