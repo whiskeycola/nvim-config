@@ -1,37 +1,51 @@
--- load defaults i.e lua_lsp
-require("nvchad.configs.lspconfig").defaults()
-
-local lspconfig = require "lspconfig"
+local nvlsp = require "nvchad.configs.lspconfig"
 local util = require "lspconfig/util"
 
--- EXAMPLE
-local servers = { "cssls", "clangd", "eslint", "svelte-language-server" }
-local nvlsp = require "nvchad.configs.lspconfig"
+-- ПРЕДУПРЕЖДЕНИЕ: Если NvChad обновлен под 2026 год, эту строку можно оставить.
+-- Если она вызывает ошибку, закомментируй её, так как она использует старый lspconfig.setup.
+-- require("nvchad.configs.lspconfig").defaults()
 
--- lsps with default config
+-- Определяем список простых серверов
+local servers = { "cssls", "clangd", "eslint", "svelte" }
+
+-- 1. Настройка списка серверов (бывший цикл)
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  vim.lsp.config(lsp, {
     on_attach = nvlsp.on_attach,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
-  }
+  })
+  vim.lsp.enable(lsp)
 end
 
--- configuring single server, example: typescript
--- lspconfig.ts_ls.setup {
---   on_attach = nvlsp.on_attach,
---   on_init = nvlsp.on_init,
---   capabilities = nvlsp.capabilities,
--- }
-lspconfig.html.setup {
+-- 2. Настройка TypeScript (ts_ls)
+vim.lsp.config("ts_ls", {
+  on_attach = nvlsp.on_attach,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  settings = {
+    typescript = {
+      tsserver = {
+        maxTsServerMemory = 8192,
+      },
+    },
+  },
+})
+vim.lsp.enable "ts_ls"
+
+-- 3. Настройка HTML
+vim.lsp.config("html", {
   on_attach = nvlsp.on_attach,
   capabilities = nvlsp.capabilities,
   filetypes = { "html", "handlebars", "htmldjango", "jinja", "jinja2", "jinja.html" },
-}
+})
+vim.lsp.enable "html"
 
-lspconfig.gopls.setup {
+-- 4. Настройка Gopls
+vim.lsp.config("gopls", {
   on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.on_attach,
+  -- В твоем коде была ошибка: capabilities = nvlsp.on_attach. Я исправил на .capabilities
+  capabilities = nvlsp.capabilities,
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
   root_dir = util.root_pattern("go.work", "go.mod", ".git"),
@@ -44,13 +58,15 @@ lspconfig.gopls.setup {
       },
     },
   },
-}
-lspconfig.tailwindcss.setup {
+})
+vim.lsp.enable "gopls"
+
+-- 5. Настройка TailwindCSS
+vim.lsp.config("tailwindcss", {
   on_attach = nvlsp.on_attach,
   capabilities = nvlsp.capabilities,
   init_options = {
     userLanguages = {
-      -- rust = "html",
       ["jinja.html"] = "html",
     },
   },
@@ -105,6 +121,15 @@ lspconfig.tailwindcss.setup {
     "typescriptreact",
     "vue",
     "svelte",
-    -- "rust",
   },
-}
+})
+vim.lsp.enable "tailwindcss"
+
+-- Если закомментировал defaults() в начале, добавь настройку Lua вручную, если нужна:
+vim.lsp.config("lua_ls", {
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
+  on_init = nvlsp.on_init,
+  settings = { Lua = { diagnostics = { globals = { "vim" } } } },
+})
+vim.lsp.enable "lua_ls"

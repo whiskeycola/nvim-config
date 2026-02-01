@@ -2,6 +2,7 @@ local nvlsp = require "nvchad.configs.lspconfig"
 
 return {
   "pmizio/typescript-tools.nvim",
+  enabled = false,
   ft = {
     "typsescript",
     "typescriptreact",
@@ -15,5 +16,6 @@ return {
   opts = {
     on_attach = nvlsp.on_attach,
     capabilities = nvlsp.capabilities,
+    root_dir = require("lspconfig").util.root_pattern("bun.lock", "package.json", ".git"),
   },
 }
