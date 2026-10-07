@@ -34,4 +34,6 @@ require "nvchad.autocmds"
 
 vim.schedule(function()
   require "mappings"
+  -- кириллические копии для привязок, заданных до загрузки langmapper
+  require("langmapper").automapping { global = true, buffer = false }
 end)

@@ -7,3 +7,5 @@ local o = vim.o
 o.clipboard = "unnamedplus" 
 
 -- o.cursorlineopt ='both' -- to enable cursorline!
+
+require "configs.keyboard-layout"
